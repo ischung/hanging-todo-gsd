@@ -42,3 +42,90 @@ export function nextMonth({ y, m }) {
 export function todayYM(d = new Date()) {
   return { y: d.getFullYear(), m: d.getMonth() };
 }
+
+const WEEKDAYS_KO = ['일', '월', '화', '수', '목', '금', '토'];
+
+/**
+ * Full subtree replace — mirrors renderTodoList in js/todos.js.
+ * Reads counts at render time from todosByDate (no caching).
+ *
+ * @param {HTMLElement} container         stable mount node (owned by app.js)
+ * @param {{y:number, m:number}} viewYM
+ * @param {string} selectedKey            "YYYY-MM-DD"
+ * @param {Record<string, unknown[]>} todosByDate
+ * @param {Date} [today=new Date()]
+ */
+export function renderCalendar(container, viewYM, selectedKey, todosByDate, today = new Date()) {
+  const cells = monthGrid(viewYM.y, viewYM.m, today);
+
+  const nav = document.createElement('div');
+  nav.className = 'cal-nav';
+  nav.append(
+    navBtn('prev', '< 이전'),
+    navBtn('today', '오늘'),
+    navBtn('next', '다음 >'),
+  );
+  const title = document.createElement('span');
+  title.className = 'cal-title';
+  title.textContent = `${viewYM.y}년 ${viewYM.m + 1}월`;
+  nav.append(title);
+
+  const head = document.createElement('div');
+  head.className = 'cal-weekdays';
+  for (const w of WEEKDAYS_KO) {
+    const c = document.createElement('div');
+    c.className = 'cal-weekday';
+    c.textContent = w;
+    head.append(c);
+  }
+
+  const grid = document.createElement('div');
+  grid.className = 'cal-grid';
+  for (const cell of cells) {
+    grid.append(buildCell(cell, selectedKey, todosByDate));
+  }
+
+  container.replaceChildren(nav, head, grid);
+}
+
+function navBtn(action, label) {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'cal-nav-btn';
+  b.dataset.action = action; // 'prev' | 'today' | 'next'
+  b.textContent = label;
+  return b;
+}
+
+function buildCell(cell, selectedKey, todosByDate) {
+  if (!cell.inMonth) {
+    const div = document.createElement('div');
+    div.className = 'cal-cell cal-cell-adjacent';
+    const num = document.createElement('span');
+    num.className = 'cal-day';
+    num.textContent = String(cell.day);
+    div.append(num);
+    return div;
+  }
+
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'cal-cell';
+  btn.dataset.key = cell.key;
+  if (cell.isToday) btn.classList.add('is-today');
+  if (cell.key === selectedKey) btn.classList.add('is-selected');
+
+  const num = document.createElement('span');
+  num.className = 'cal-day';
+  num.textContent = String(cell.day);
+  btn.append(num);
+
+  const count = todosByDate[cell.key]?.length ?? 0;
+  if (count > 0) {
+    const badge = document.createElement('span');
+    badge.className = 'cal-badge';
+    badge.textContent = String(count);
+    btn.append(badge);
+  }
+  return btn;
+}
