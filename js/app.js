@@ -45,6 +45,7 @@ function buildListContainer() {
 const form = buildForm();
 const listContainer = buildListContainer();
 const root = document.getElementById('app');
+if (!root) throw new Error('[hansung-todo] #app 마운트 노드가 없습니다. index.html에 <main id="app">가 있고, app.js가 defer 또는 <body> 끝에서 로드되는지 확인하세요.');
 root.replaceChildren(form, listContainer);
 
 function commit(nextState) {
