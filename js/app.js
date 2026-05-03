@@ -14,7 +14,7 @@ console.info('[hansung-todo] foundation loaded', { today: dateKey() });
 // Phase 2 (02-02): 부트스트랩 — TODAY 캡처 → DOM 마운트(폼 + 리스트 컨테이너) → 최초 렌더 → 추가 폼 submit 와이어링.
 // toggle/edit/remove 위임 listener는 02-03에서 추가.
 import {
-  getTodosForDate, addTodo, renderTodoList,
+  getTodosForDate, addTodo, toggleTodo, editTodo, removeTodo, renderTodoList,
 } from './todos.js';
 
 const TODAY = dateKey();
@@ -68,5 +68,62 @@ form.addEventListener('submit', (e) => {
   input.value = '';
   input.focus();
 });
+
+// 위임: 체크박스 토글 (change 이벤트 — Pitfall 3)
+listContainer.addEventListener('change', (e) => {
+  const cb = e.target;
+  if (!(cb instanceof HTMLInputElement) || cb.type !== 'checkbox') return;
+  const id = cb.closest('li')?.dataset.id;
+  if (!id) return;
+  commit(toggleTodo(state, TODAY, id));
+});
+
+// 위임: 클릭 — 삭제 / 편집 시작
+listContainer.addEventListener('click', (e) => {
+  const t = e.target;
+  if (!(t instanceof HTMLElement)) return;
+  const id = t.closest('li')?.dataset.id;
+  if (!id) return;
+  if (t.matches('.todo-remove')) commit(removeTodo(state, TODAY, id));
+  else if (t.matches('.todo-edit') || t.matches('.todo-text')) startEdit(id);
+});
+
+// 위임: 편집 input keydown — 한국어 IME 가드 (Pitfall 1)
+listContainer.addEventListener('keydown', (e) => {
+  const input = e.target;
+  if (!(input instanceof HTMLInputElement) || !input.matches('.todo-edit-input')) return;
+  if (e.isComposing || e.keyCode === 229) return;
+  if (e.key === 'Enter') { e.preventDefault(); commitEdit(input); }
+  else if (e.key === 'Escape') { e.preventDefault(); cancelEdit(); }
+});
+
+// 위임: 편집 input focusout — 재진입 가드 (Pitfall 2)
+listContainer.addEventListener('focusout', (e) => {
+  const input = e.target;
+  if (!(input instanceof HTMLInputElement) || !input.matches('.todo-edit-input')) return;
+  if (editingId == null) return;
+  commitEdit(input);
+});
+
+function startEdit(id) {
+  editingId = id;
+  render();
+  const input = listContainer.querySelector('.todo-edit-input');
+  if (input) {
+    input.focus();
+    input.setSelectionRange(input.value.length, input.value.length);
+  }
+}
+
+function commitEdit(input) {
+  const id = editingId; editingId = null;   // ← 가드 먼저 풀기 (Pitfall 2)
+  if (id == null) return;
+  commit(editTodo(state, TODAY, id, input.value));
+}
+
+function cancelEdit() {
+  editingId = null;
+  render();
+}
 
 render();
