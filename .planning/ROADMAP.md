@@ -54,7 +54,7 @@
   5. CRUD operations performed on the selected date persist and re-appear on that exact date after reload — no UTC drift between cell, key, and stored data.
 **Plans**: 3 plans
   - [x] 03-01-PLAN.md — js/calendar.js: pure helpers (monthGrid/prev/next/todayYM) + renderCalendar + formatHeader
-  - [ ] 03-02-PLAN.md — js/app.js wiring: selectedKey+viewYM, mount restructure, render fan-out, delegated calendar listener
+  - [x] 03-02-PLAN.md — js/app.js wiring: selectedKey+viewYM, mount restructure, render fan-out, delegated calendar listener
   - [x] 03-03-PLAN.md — css/styles.css minimal calendar grid + state class rules
 **UI hint**: yes
 
@@ -74,7 +74,7 @@
 |-------|----------------|--------|-----------|
 | 1. Foundation | 0/0 | Not started | - |
 | 2. Todo CRUD | 0/0 | Not started | - |
-| 3. Calendar Integration | 2/3 | In progress | - |
+| 3. Calendar Integration | 3/3 | Complete (UAT pending) | 2026-05-03 |
 | 4. Modern Polish & Failure UX | 0/0 | Not started | - |
 
 ## Coverage
