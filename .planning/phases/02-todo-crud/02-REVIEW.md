@@ -9,10 +9,18 @@ files_reviewed_list:
   - css/styles.css
 findings:
   critical: 0
-  warning: 5
+  warning: 0
   info: 4
-  total: 9
-status: issues_found
+  total: 4
+  resolved_warning: 5
+status: warnings_resolved
+resolved_at: 2026-05-03T00:00:00Z
+resolved_in_commits:
+  WR-01: bff3cf2
+  WR-02: f79a52e
+  WR-03: 355485f
+  WR-04: de743cb
+  WR-05: 3a3172c
 ---
 
 # Phase 02: Code Review Report
@@ -30,6 +38,7 @@ Phase 2의 순수 헬퍼(`todos.js`)와 위임 리스너 와이어링(`app.js`),
 
 ### WR-01: 편집 전환 시 focusout이 새 editingId를 덮어쓴다 (잘못된 todo에 텍스트 commit)
 
+**Status:** resolved in commit bff3cf2 — `startEdit` 진입 시 진행 중 편집이 있으면 `editingId = null`로 풀어 focusout 재진입을 차단한 뒤 OLD id 기준으로 명시 commit하도록 수정.
 **File:** `js/app.js:108-116, 101-106, 118-122`
 **Issue:** 사용자가 todo A를 편집 중인 상태에서 todo B의 `.todo-edit` 또는 `.todo-text`를 클릭하면 다음 순서가 발생한다.
 
@@ -66,6 +75,7 @@ function startEdit(id) {
 
 ### WR-02: localStorage 데이터가 변조된 경우 todos.js가 throw
 
+**Status:** resolved in commit f79a52e — `storage.load()`가 `todosByDate`의 각 value를 `Array.isArray`로 검증하고 변조 시 `defaultState()`로 폴백.
 **File:** `js/storage.js:14-17` (boundary), `js/todos.js:5,7,27,40,51`
 **Issue:** `storage.load()`는 `parsed.todosByDate`가 object인지만 검사하고 각 value가 배열인지는 검증하지 않는다. 누가 DevTools에서 `localStorage`를 `{"schemaVersion":1,"todosByDate":{"2026-05-03":"oops"}}`처럼 변조하면 `getTodosForDate` → `[...list].sort(...)` 또는 `addTodo` → `[...prev, todo]`에서 TypeError가 발생해 앱 전체가 죽는다. Phase 1 boundary 계약은 "이 모듈만 raw localStorage 호출"이지만 실제 invariant(`value === Array`)를 강제하지 않는다.
 **Fix:** `storage.js`의 `load()`에서 각 value를 배열로만 좁히거나, `todos.js`의 `state.todosByDate[key] ?? []`를 `Array.isArray(state.todosByDate[key]) ? state.todosByDate[key] : []`로 방어한다.
@@ -79,6 +89,7 @@ for (const k of Object.keys(parsed.todosByDate)) {
 
 ### WR-03: `crypto.randomUUID()`가 secure context 외에서 throw
 
+**Status:** resolved in commit 355485f — `newId()` 헬퍼가 `globalThis.crypto?.randomUUID`를 우선 사용하고, 없으면 `Date.now()` + `Math.random()` 기반 id로 폴백.
 **File:** `js/todos.js:14`
 **Issue:** `crypto.randomUUID()`는 secure context (HTTPS, localhost, 일부 브라우저의 `file://`)에서만 정의된다. 프로젝트 STACK 문서는 `file://` 더블클릭 데모를 명시 권장 시나리오로 둔다. Chrome은 `file://`을 secure context로 취급하지만 Safari는 그렇지 않으며, 이 경우 `crypto.randomUUID is not a function`이 발생하며 `addTodo`가 죽고 form submit이 실패한다.
 **Fix:** 폴백을 추가하거나, `Date.now() + Math.random()` 기반의 단순 id 생성기를 둔다.
@@ -92,6 +103,7 @@ function newId() {
 
 ### WR-04: `#app` 누락 시 부트스트랩이 즉시 throw
 
+**Status:** resolved in commit de743cb — `if (!root) throw new Error(...)` 가드 추가, 메시지에 `<main id="app">` 마운트 계약과 defer 로딩 안내 포함.
 **File:** `js/app.js:47-48`
 **Issue:** `document.getElementById('app')`가 null일 때 곧바로 `root.replaceChildren(...)`을 호출 → `TypeError`. `index.html` 계약이 어디에서도 명시되지 않아 누군가 마크업 구조를 바꾸면 디버깅이 어렵다. 또한 `app.js`가 `<head>` 또는 `defer` 없이 로드되면 DOM이 아직 없을 때도 같은 오류.
 **Fix:** 명시적 가드 + 메시지로 실패 원인을 노출한다.
@@ -105,6 +117,7 @@ if (!root) throw new Error('[hansung-todo] #app 마운트 노드가 없습니다
 
 ### WR-05: 편집 중에 같은 todo의 편집 버튼/텍스트를 다시 클릭하면 입력 손실
 
+**Status:** resolved in commit 3a3172c — 클릭 핸들러에서 `editingId !== id`일 때만 `startEdit(id)`를 호출하도록 가드 추가.
 **File:** `js/app.js:88, 108-116`
 **Issue:** 편집 중 `.todo-text`는 input으로 교체되어 매치하지 않지만 `.todo-edit` 버튼은 그대로 남아있다. 사용자가 편집 중 실수로 ✎ 버튼을 다시 누르면 `startEdit(sameId)`가 호출되어 `render()`가 실행되며 input이 재생성된다. 이 과정에서 (a) 사용자가 입력 중이던 텍스트가 사라지거나, (b) WR-01 시나리오와 동일하게 focusout이 발화되어 입력 텍스트가 commit된다(이 경우는 같은 id이므로 데이터가 잘못 가지는 않지만 selection/cursor 상태는 모두 잃는다).
 **Fix:** 클릭 핸들러에서 동일 id에 대한 startEdit 재진입을 가드한다.
