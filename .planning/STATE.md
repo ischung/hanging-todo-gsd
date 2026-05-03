@@ -2,8 +2,8 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: "Phase 3 — plan 1/3 (calendar module) shipped"
-last_updated: "2026-05-03T11:08:00Z"
+status: "Phase 3 — plan 03 (calendar CSS) shipped; 2/3 plans done; plan 02 wiring 남음"
+last_updated: "2026-05-03T11:15:00Z"
 progress:
   total_phases: 4
   completed_phases: 2
@@ -23,12 +23,12 @@ progress:
 ## Current Position
 
 Phase: 03 (calendar-integration) — EXECUTING
-Plan: 2 of 3 (next)
+Plan: 02 (wiring) — only remaining plan in phase 3
 
 - **Phase:** 3 — Calendar Integration
-- **Plan:** 03-01 complete; 03-02 next (app.js wiring)
-- **Status:** Phase 3 plan 1/3 (calendar module) shipped
-- **Progress:** ▰▰▱▱ 50% (2 / 4 phases complete; phase 3 in progress)
+- **Plan:** 03-01 ✓, 03-03 ✓; 03-02 (app.js wiring) 남음
+- **Status:** Phase 3 plan 03 (캘린더 CSS) 완료; 2/3 plans done
+- **Progress:** ▰▰▱▱ 50% (2 / 4 phases complete; phase 3 in progress 2/3 plans)
 
 ## Performance Metrics
 
@@ -59,6 +59,8 @@ Plan: 2 of 3 (next)
 | `monthGrid`을 `+i` 루프 + Date 생성자 overflow normalization으로 구현 (조건부 leap-year 분기 제거) | 항상 42셀 고정 — 레이아웃 점프 없음, 분기 0개 | Phase 3 (plan 01) |
 | 인접달 셀은 `<div>` (not `<button disabled>`) — `data-key` 부재로 자동 비활성 | 위임 핸들러의 `closest('[data-key]')` 가드만으로 no-op 보장; 브라우저별 disabled focus 차이 회피 | Phase 3 (plan 01) |
 | `formatHeader`은 `key`를 split + `new Date(y, m-1, d)`로 재구성 (절대 `new Date(key)` 금지) | Phase 1의 로컬 시간 lock 유지 (ECMA-262 §21.4.3.2 ISO 문자열 UTC 드리프트 회피) | Phase 3 (plan 01) |
+| today 강조는 border 굵기(1→2px) + color 이중 신호; selected는 filled bg — 신호 종류 자체가 달라 색맹 안전 | decision C/E; color-only 회피 | Phase 3 (plan 03) |
+| Phase 3 CSS는 box-shadow/transition/animation/gradient 토큰 0개 | STYL-01에서 본격 폴리시; 미니멀 가시성만 보장 | Phase 3 (plan 03) |
 
 ### Open Todos
 
@@ -71,8 +73,8 @@ None.
 
 ## Session Continuity
 
-- **Last session:** 2026-05-03T11:08:00Z
-- **Next action:** Phase 3 plan 02 실행 (`js/app.js` wiring — selectedKey/viewYM, mount restructure, render fan-out).
+- **Last session:** 2026-05-03T11:15:00Z
+- **Next action:** Phase 3 plan 02 실행 (`js/app.js` wiring — selectedKey/viewYM, mount restructure, render fan-out, delegated calendar listener). 본 플랜(03-03 CSS)이 먼저 끝나 있어 wiring이 들어오면 즉시 시각화 가능.
 
 ---
 *State initialized: 2026-05-03*

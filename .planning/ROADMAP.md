@@ -55,7 +55,7 @@
 **Plans**: 3 plans
   - [x] 03-01-PLAN.md — js/calendar.js: pure helpers (monthGrid/prev/next/todayYM) + renderCalendar + formatHeader
   - [ ] 03-02-PLAN.md — js/app.js wiring: selectedKey+viewYM, mount restructure, render fan-out, delegated calendar listener
-  - [ ] 03-03-PLAN.md — css/styles.css minimal calendar grid + state class rules
+  - [x] 03-03-PLAN.md — css/styles.css minimal calendar grid + state class rules
 **UI hint**: yes
 
 ### Phase 4: Modern Polish & Failure UX
@@ -74,7 +74,7 @@
 |-------|----------------|--------|-----------|
 | 1. Foundation | 0/0 | Not started | - |
 | 2. Todo CRUD | 0/0 | Not started | - |
-| 3. Calendar Integration | 1/3 | In progress | - |
+| 3. Calendar Integration | 2/3 | In progress | - |
 | 4. Modern Polish & Failure UX | 0/0 | Not started | - |
 
 ## Coverage
