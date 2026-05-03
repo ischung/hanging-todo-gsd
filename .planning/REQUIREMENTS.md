@@ -7,12 +7,12 @@
 
 ### Calendar
 
-- [ ] **CAL-01**: 사용자는 월(月) 그리드 형태의 캘린더를 볼 수 있다 (요일 헤더 + 7×N 날짜 셀)
-- [ ] **CAL-02**: 사용자는 이전/다음 달로 이동할 수 있다
-- [ ] **CAL-03**: 사용자는 "오늘" 버튼으로 이번 달·오늘 날짜로 즉시 이동할 수 있다
-- [ ] **CAL-04**: 오늘 날짜는 시각적으로 강조된다
-- [ ] **CAL-05**: 선택된 날짜는 시각적으로 강조된다 (오늘 강조와 구분)
-- [ ] **CAL-06**: 각 날짜 셀은 해당 날짜의 todo 개수를 표시한다 (0개면 미표시)
+- [x] **CAL-01**: 사용자는 월(月) 그리드 형태의 캘린더를 볼 수 있다 (요일 헤더 + 7×N 날짜 셀)
+- [x] **CAL-02**: 사용자는 이전/다음 달로 이동할 수 있다
+- [x] **CAL-03**: 사용자는 "오늘" 버튼으로 이번 달·오늘 날짜로 즉시 이동할 수 있다
+- [x] **CAL-04**: 오늘 날짜는 시각적으로 강조된다
+- [x] **CAL-05**: 선택된 날짜는 시각적으로 강조된다 (오늘 강조와 구분)
+- [x] **CAL-06**: 각 날짜 셀은 해당 날짜의 todo 개수를 표시한다 (0개면 미표시)
 - [ ] **CAL-07**: 사용자가 날짜 셀을 클릭하면 그 날짜가 선택되고 해당 날짜의 todo 목록이 노출된다
 
 ### Todo
@@ -24,7 +24,7 @@
 - [ ] **TODO-05**: 사용자는 todo를 삭제할 수 있다
 - [ ] **TODO-06**: todo 목록은 `createdAt` 오름차순으로 안정적으로 정렬된다
 - [ ] **TODO-07**: todo가 없는 날짜는 빈 상태(empty state) 메시지를 표시한다
-- [ ] **TODO-08**: 선택된 날짜의 사람 친화적 헤더가 표시된다 (예: "2026년 5월 3일 일요일")
+- [x] **TODO-08**: 선택된 날짜의 사람 친화적 헤더가 표시된다 (예: "2026년 5월 3일 일요일")
 
 ### Persistence
 
@@ -73,12 +73,12 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CAL-01 | Phase 3 | Pending |
-| CAL-02 | Phase 3 | Pending |
-| CAL-03 | Phase 3 | Pending |
-| CAL-04 | Phase 3 | Pending |
-| CAL-05 | Phase 3 | Pending |
-| CAL-06 | Phase 3 | Pending |
+| CAL-01 | Phase 3 | Complete (03-01) |
+| CAL-02 | Phase 3 | Complete (03-01) |
+| CAL-03 | Phase 3 | Complete (03-01) |
+| CAL-04 | Phase 3 | Complete (03-01) |
+| CAL-05 | Phase 3 | Complete (03-03) |
+| CAL-06 | Phase 3 | Complete (03-01) |
 | CAL-07 | Phase 3 | Pending |
 | TODO-01 | Phase 2 | Pending |
 | TODO-02 | Phase 2 | Pending |
@@ -87,7 +87,7 @@
 | TODO-05 | Phase 2 | Pending |
 | TODO-06 | Phase 2 | Pending |
 | TODO-07 | Phase 2 | Pending |
-| TODO-08 | Phase 3 | Pending |
+| TODO-08 | Phase 3 | Complete (03-01) |
 | PERS-01 | Phase 1 | Pending |
 | PERS-02 | Phase 1 | Pending |
 | PERS-03 | Phase 2 | Pending |

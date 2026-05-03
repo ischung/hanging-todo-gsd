@@ -8,7 +8,7 @@
 
 - [ ] **Phase 1: Foundation** — Static shell, date helpers, todo model, persistence layer, README run-instructions
 - [ ] **Phase 2: Todo CRUD (against today)** — Store + todo list view with add/toggle/edit/delete persisted across reload
-- [ ] **Phase 3: Calendar Integration** — Month-grid calendar with date selection, today/selected highlights, count badges
+- [x] **Phase 3: Calendar Integration** — Month-grid calendar with date selection, today/selected highlights, count badges
 - [ ] **Phase 4: Modern Polish & Failure UX** — Modern/polished visual style + graceful save-failure surfacing
 
 ## Phase Details
@@ -52,7 +52,10 @@
   3. Each date cell with one or more todos shows that count; cells with zero todos show no badge, and the badge updates immediately when todos are added/deleted.
   4. Clicking any date cell selects it, the selected-day human-friendly header (e.g. "2026년 5월 3일 일요일") updates, and the todo list re-renders for that date.
   5. CRUD operations performed on the selected date persist and re-appear on that exact date after reload — no UTC drift between cell, key, and stored data.
-**Plans**: TBD
+**Plans**: 3 plans
+  - [x] 03-01-PLAN.md — js/calendar.js: pure helpers (monthGrid/prev/next/todayYM) + renderCalendar + formatHeader
+  - [x] 03-02-PLAN.md — js/app.js wiring: selectedKey+viewYM, mount restructure, render fan-out, delegated calendar listener
+  - [x] 03-03-PLAN.md — css/styles.css minimal calendar grid + state class rules
 **UI hint**: yes
 
 ### Phase 4: Modern Polish & Failure UX
@@ -71,7 +74,7 @@
 |-------|----------------|--------|-----------|
 | 1. Foundation | 0/0 | Not started | - |
 | 2. Todo CRUD | 0/0 | Not started | - |
-| 3. Calendar Integration | 0/0 | Not started | - |
+| 3. Calendar Integration | 3/3 | Complete (UAT pending) | 2026-05-03 |
 | 4. Modern Polish & Failure UX | 0/0 | Not started | - |
 
 ## Coverage
