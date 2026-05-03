@@ -1,0 +1,16 @@
+/* Phase 1: 정적 자산 구조(DEL-02) 충족용 골격. 본격 스타일은 Phase 4 (STYL-01). */
+:root {
+  /* design tokens placeholder — Phase 4에서 채움 */
+}
+
+/* Phase 2: todo 행 상태 시각 구분 (미니멀). 본격 폴리시는 Phase 4 (STYL-01). */
+.todo-list .done .todo-text {
+  text-decoration: line-through;
+  color: #999;
+}
+.empty {
+  color: #999;
+}
+.editing .todo-text {
+  display: none;
+}
