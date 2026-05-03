@@ -26,10 +26,7 @@ export function load() {
 }
 
 export function save(state) {
-  try {
-    localStorage.setItem(KEY, JSON.stringify(state));
-    return true;
-  } catch {
-    return false;
-  }
+  // Phase 4 (PERS-04): 실패 시 silent false 대신 throw — commit()에서 catch하여 banner 노출.
+  // localStorage.* 노출은 여전히 이 모듈 내부에 갇혀 있다 (storage 경계 유지).
+  localStorage.setItem(KEY, JSON.stringify(state));
 }
