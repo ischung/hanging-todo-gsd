@@ -24,6 +24,7 @@ let state = load();
 let viewYM = todayYM();              // {y, m} — transient UI state, never persisted (decision D)
 let selectedKey = dateKey();         // "YYYY-MM-DD" — resets to today on reload (decision D)
 let editingId = null; // transient UI state — store 외부 (02-03에서 사용)
+let storageError = null;  // Phase 4 (PERS-04): save() 실패 시 Error 캡처, 성공/닫기 시 null.
 
 function buildForm() {
   const f = document.createElement('form');
@@ -64,14 +65,20 @@ const calendarSection = buildCalendarSection();
 const dateHeader = buildDateHeader();
 const root = document.getElementById('app');
 if (!root) throw new Error('[hansung-todo] #app 마운트 노드가 없습니다. index.html에 <main id="app">가 있고, app.js가 defer 또는 <body> 끝에서 로드되는지 확인하세요.');
+const banner = document.getElementById('storage-banner');
+if (!banner) throw new Error('[hansung-todo] #storage-banner 마운트 노드가 없습니다. index.html에 <aside id="storage-banner">가 <main id="app"> 위에 있는지 확인하세요.');
 root.replaceChildren(calendarSection, dateHeader, form, listContainer);
 
 function commit(nextState) {
-  state = nextState;
-  if (!save(state)) {
-    console.warn('[hansung-todo] save failed; mutation kept in memory');
+  state = nextState;                  // (1) 메모리는 항상 적용 (UI 즉시 반영, rollback 안 함)
+  try {
+    save(state);                      // (2) persist 시도 (실패 시 throw)
+    storageError = null;              // (3) 성공 -> 에러 클리어 (이전 실패 banner도 자동 사라짐)
+  } catch (err) {
+    storageError = err;               // (4) 에러 캡처 -- render()가 banner 토글
+    console.warn('[hansung-todo] save failed; kept in memory', err);
   }
-  render();
+  render();                           // (5) banner 노출/숨김 결정은 render에서 storageError로
 }
 
 function render() {
@@ -79,6 +86,8 @@ function render() {
   dateHeader.textContent = formatHeader(selectedKey);
   const todos = getTodosForDate(state, selectedKey);
   renderTodoList(listContainer, todos, editingId);
+  // Phase 4 (PERS-04): storageError 존재 시 banner 노출, 아니면 숨김.
+  banner.hidden = storageError == null;
 }
 
 // 위임: 캘린더 nav 버튼 + 셀 선택 (단일 listener — Phase 2 패턴 동일).
@@ -107,6 +116,20 @@ calendarSection.addEventListener('click', (e) => {
     return;
   }
   // else: adjacent-month div or whitespace — no-op (decision E lock).
+});
+
+// Phase 4 (PERS-04): banner [재시도][닫기] 위임 — 1회 등록 (Phase 2/3 위임 패턴 동일).
+banner.addEventListener('click', (e) => {
+  const t = e.target;
+  if (!(t instanceof HTMLElement)) return;
+  const action = t.closest('[data-action]')?.dataset.action;
+  if (action === 'retry') {
+    // 현재 in-memory state를 그대로 재저장 — commit이 try/catch + render까지 처리.
+    commit(state);
+  } else if (action === 'dismiss') {
+    storageError = null;
+    render();
+  }
 });
 
 form.addEventListener('submit', (e) => {

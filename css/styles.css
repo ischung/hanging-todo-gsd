@@ -1,6 +1,41 @@
-/* Phase 1: 정적 자산 구조(DEL-02) 충족용 골격. 본격 스타일은 Phase 4 (STYL-01). */
+/* Phase 1: 정적 자산 구조(DEL-02) 충족용 골격. Phase 4 (STYL-01)에서 토큰화. */
 :root {
-  /* design tokens placeholder — Phase 4에서 채움 */
+  /* Phase 4 (STYL-01): design tokens. */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  --shadow-1: 0 1px 2px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.06);
+  --transition: 150ms ease-out;
+
+  --text-sm: 13px;
+  --text-base: 15px;
+  --text-lg: 18px;
+
+  --accent: #2563eb;
+  --accent-strong: #1e40af;
+  --bg: #ffffff;
+  --bg-muted: #f3f4f6;
+  --text: #111827;
+  --text-muted: #6b7280;
+  --border: #e5e7eb;
+  --danger: #dc2626;
+  --danger-bg: #fef2f2;
+
+  font-family:
+    -apple-system, BlinkMacSystemFont,
+    'Apple SD Gothic Neo',
+    'Pretendard Variable', 'Pretendard',
+    'Malgun Gothic',
+    'Segoe UI', system-ui,
+    sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  font-size: var(--text-base);
+  line-height: 1.5;
 }
 
 /* Phase 2: todo 행 상태 시각 구분 (미니멀). 본격 폴리시는 Phase 4 (STYL-01). */
@@ -39,32 +74,33 @@
 }
 .cal-cell {
   background: none;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border);
   padding: 0.25rem;
   min-height: 3rem;
   position: relative;
   text-align: left;
   font: inherit;
   cursor: pointer;
+  transition: var(--transition);
 }
 .cal-cell-adjacent {
-  border: 1px solid #eee;
+  border: 1px solid var(--border);
   color: #ccc;
   pointer-events: none;
 }
 .cal-cell.is-today {
-  border: 2px solid #2563eb;
-  color: #2563eb;
+  border: 2px solid var(--accent);
+  color: var(--accent);
   font-weight: 600;
 }
 .cal-cell.is-selected {
-  background: #2563eb;
+  background: var(--accent);
   color: #fff;
 }
 .cal-cell.is-today.is-selected {
-  background: #2563eb;
+  background: var(--accent);
   color: #fff;
-  border: 2px solid #1e40af;
+  border: 2px solid var(--accent-strong);
 }
 .cal-badge {
   position: absolute;
@@ -77,4 +113,44 @@
   margin: 1rem 0 0.5rem;
   font-size: 1.125rem;
   font-weight: 600;
+}
+
+/* Phase 4 (STYL-01): transition 적용 — hover/selected/toggle 부드러움. */
+button {
+  transition: var(--transition);
+}
+.todo-checkbox {
+  transition: var(--transition);
+}
+
+/* Phase 4 (STYL-01): subtle elevation — CONTEXT A.2 잠금 (캘린더/리스트/banner 3곳 한정).
+   shadow는 elevation only — outer box 영역 변화 0 (margin/padding/border-width 미변경) → 시각 회귀 0 보존. */
+.cal-grid {
+  box-shadow: var(--shadow-1);
+}
+.todo-list {
+  box-shadow: var(--shadow-1);
+}
+
+/* Phase 4 (PERS-04): storage failure banner. 색맹 안전 3중 신호(배경 + 좌측 막대 + 텍스트). */
+.banner {
+  display: block;
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-4);
+  border-radius: 4px;
+  box-shadow: var(--shadow-1);
+  transition: opacity var(--transition);
+}
+.banner[hidden] {
+  display: none;
+}
+.banner--danger {
+  background: var(--danger-bg);
+  color: var(--text);
+  border-left: 4px solid var(--danger);
+}
+.banner__actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
 }
