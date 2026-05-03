@@ -3,10 +3,19 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
     <title>Hansung Todo</title>
     <link rel="stylesheet" href="./css/styles.css" />
   </head>
   <body>
+    <!-- Phase 4 (PERS-04): 저장 실패 알림. 평소 hidden, 실패 시 app.js가 hidden 제거. -->
+    <aside id="storage-banner" class="banner banner--danger" hidden role="alert">
+      <p>저장에 실패했습니다. 시크릿 모드이거나 저장 공간이 부족할 수 있습니다.</p>
+      <div class="banner__actions">
+        <button type="button" data-action="retry">다시 시도</button>
+        <button type="button" data-action="dismiss">닫기</button>
+      </div>
+    </aside>
     <main id="app"><!-- Phase 3: js/app.js mounts calendar + 날짜 헤더 + todo form/list 순서로 렌더 --></main>
     <script type="module" src="./js/app.js"></script>
   </body>
