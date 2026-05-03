@@ -1,5 +1,5 @@
 // Phase 3: calendar 도메인 모듈 — 순수 헬퍼(monthGrid/prevMonth/nextMonth/todayYM) + DOM 렌더(renderCalendar) + 헤더 포맷터(formatHeader).
-// localStorage I/O 금지, dateKey()만 import. 호출처(app.js)가 viewYM/selectedKey/todosByDate를 주입.
+// 영속 저장 I/O 금지 (storage.js 경계), dateKey()만 import. 호출처(app.js)가 viewYM/selectedKey/todosByDate를 주입.
 
 import { dateKey } from './dateKey.js';
 
@@ -128,4 +128,18 @@ function buildCell(cell, selectedKey, todosByDate) {
     btn.append(badge);
   }
   return btn;
+}
+
+const HEADER_FMT = new Intl.DateTimeFormat('ko-KR', { dateStyle: 'full' });
+
+/**
+ * "YYYY-MM-DD" → "YYYY년 M월 D일 요일" (ko-KR full).
+ * Reconstructs Date from parts (NOT new Date(key)) to keep local-time discipline.
+ *
+ * @param {string} key  "YYYY-MM-DD"
+ * @returns {string}
+ */
+export function formatHeader(key) {
+  const [y, m, d] = key.split('-').map(Number);
+  return HEADER_FMT.format(new Date(y, m - 1, d));
 }
