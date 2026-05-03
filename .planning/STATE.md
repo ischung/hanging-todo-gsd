@@ -2,8 +2,8 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: "Phase 3 완료 — 3/3 plans done; UAT user sign-off 남음 (시각 확인 10건)"
-last_updated: "2026-05-03T11:30:00Z"
+status: "Phase 3 shipped — PR #2 (UAT 8/8 pass)"
+last_updated: "2026-05-03T12:00:00Z"
 progress:
   total_phases: 4
   completed_phases: 3
