@@ -1,6 +1,41 @@
-/* Phase 1: 정적 자산 구조(DEL-02) 충족용 골격. 본격 스타일은 Phase 4 (STYL-01). */
+/* Phase 1: 정적 자산 구조(DEL-02) 충족용 골격. Phase 4 (STYL-01)에서 토큰화. */
 :root {
-  /* design tokens placeholder — Phase 4에서 채움 */
+  /* Phase 4 (STYL-01): design tokens. */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  --shadow-1: 0 1px 2px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.06);
+  --transition: 150ms ease-out;
+
+  --text-sm: 13px;
+  --text-base: 15px;
+  --text-lg: 18px;
+
+  --accent: #2563eb;
+  --accent-strong: #1e40af;
+  --bg: #ffffff;
+  --bg-muted: #f3f4f6;
+  --text: #111827;
+  --text-muted: #6b7280;
+  --border: #e5e7eb;
+  --danger: #dc2626;
+  --danger-bg: #fef2f2;
+
+  font-family:
+    -apple-system, BlinkMacSystemFont,
+    'Apple SD Gothic Neo',
+    'Pretendard Variable', 'Pretendard',
+    'Malgun Gothic',
+    'Segoe UI', system-ui,
+    sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  font-size: var(--text-base);
+  line-height: 1.5;
 }
 
 /* Phase 2: todo 행 상태 시각 구분 (미니멀). 본격 폴리시는 Phase 4 (STYL-01). */
