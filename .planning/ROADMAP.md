@@ -35,7 +35,11 @@
   3. After a page reload, every previously added/toggled/edited todo is still there in stable `createdAt`-ascending order.
   4. A day with no todos shows an empty-state message instead of a blank list.
   5. Entering a todo with text like `<img src=x onerror=alert(1)>` renders as literal text — never as HTML — confirming `textContent`-only rendering for user input.
-**Plans**: TBD
+**Plans**: 4 plans
+  - [ ] 02-01-PLAN.md — js/todos.js: pure immutable state helpers + renderTodoList
+  - [ ] 02-02-PLAN.md — app.js bootstrap: TODAY 캡처 + DOM 마운트 + form submit (add)
+  - [ ] 02-03-PLAN.md — app.js 위임 이벤트 4종 + 인라인 편집 라이프사이클 (toggle/edit/remove)
+  - [ ] 02-04-PLAN.md — css/styles.css 미니멀 3룰 + phase-gate 검증 (grep + 16 시나리오)
 **UI hint**: yes
 
 ### Phase 3: Calendar Integration
