@@ -14,3 +14,67 @@
 .editing .todo-text {
   display: none;
 }
+
+/* Phase 3: 캘린더 그리드 + 상태 클래스 (미니멀). 본격 폴리시는 Phase 4 (STYL-01). */
+.cal-nav {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.cal-title {
+  margin-left: auto;
+  font-weight: 600;
+}
+.cal-weekdays,
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+.cal-weekday {
+  text-align: center;
+  font-size: 0.875rem;
+  color: #666;
+  padding: 0.25rem 0;
+}
+.cal-cell {
+  background: none;
+  border: 1px solid #ddd;
+  padding: 0.25rem;
+  min-height: 3rem;
+  position: relative;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+.cal-cell-adjacent {
+  border: 1px solid #eee;
+  color: #ccc;
+  pointer-events: none;
+}
+.cal-cell.is-today {
+  border: 2px solid #2563eb;
+  color: #2563eb;
+  font-weight: 600;
+}
+.cal-cell.is-selected {
+  background: #2563eb;
+  color: #fff;
+}
+.cal-cell.is-today.is-selected {
+  background: #2563eb;
+  color: #fff;
+  border: 2px solid #1e40af;
+}
+.cal-badge {
+  position: absolute;
+  top: 0.125rem;
+  right: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+#date-header {
+  margin: 1rem 0 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
