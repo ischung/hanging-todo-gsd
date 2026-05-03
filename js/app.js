@@ -75,9 +75,39 @@ function commit(nextState) {
 }
 
 function render() {
+  renderCalendar(calendarSection, viewYM, selectedKey, state.todosByDate);
+  dateHeader.textContent = formatHeader(selectedKey);
   const todos = getTodosForDate(state, selectedKey);
   renderTodoList(listContainer, todos, editingId);
 }
+
+// 위임: 캘린더 nav 버튼 + 셀 선택 (단일 listener — Phase 2 패턴 동일).
+// 인접달 셀(<div>)은 data-key/data-action 둘 다 없어 자연스럽게 no-op.
+calendarSection.addEventListener('click', (e) => {
+  const t = e.target;
+  if (!(t instanceof HTMLElement)) return;
+
+  const navBtn = t.closest('[data-action]');
+  if (navBtn) {
+    const a = navBtn.dataset.action;
+    if (a === 'prev') viewYM = prevMonth(viewYM);
+    else if (a === 'next') viewYM = nextMonth(viewYM);
+    else if (a === 'today') {
+      viewYM = todayYM();
+      selectedKey = dateKey();
+    }
+    render();
+    return;
+  }
+
+  const cell = t.closest('[data-key]');
+  if (cell) {
+    selectedKey = cell.dataset.key;
+    render();
+    return;
+  }
+  // else: adjacent-month div or whitespace — no-op (decision E lock).
+});
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
