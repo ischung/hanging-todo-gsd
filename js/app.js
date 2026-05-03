@@ -110,6 +110,16 @@ listContainer.addEventListener('focusout', (e) => {
 });
 
 function startEdit(id) {
+  // 진행 중인 편집이 다른 todo에 있으면 먼저 OLD id 기준으로 commit한다.
+  // editingId를 먼저 null로 풀어 두지 않으면, 이어지는 render()가 OLD input을
+  // DOM에서 제거하며 발화하는 focusout이 NEW id를 캡처해 OLD 텍스트를 잘못된
+  // todo에 commit한다 (WR-01 race). commit 자체가 render도 호출하므로 별도 호출 불요.
+  if (editingId != null && editingId !== id) {
+    const prevInput = listContainer.querySelector('.todo-edit-input');
+    const prevId = editingId;
+    editingId = null; // focusout 핸들러 재진입 차단 (Pitfall 2 + WR-01)
+    if (prevInput) commit(editTodo(state, TODAY, prevId, prevInput.value));
+  }
   editingId = id;
   render();
   const input = listContainer.querySelector('.todo-edit-input');
