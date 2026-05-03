@@ -2,8 +2,8 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: "Phase 2 shipped — PR #1"
-last_updated: "2026-05-03T10:43:25.220Z"
+status: "Phase 3 — plan 1/3 (calendar module) shipped"
+last_updated: "2026-05-03T11:08:00Z"
 progress:
   total_phases: 4
   completed_phases: 2
@@ -22,13 +22,13 @@ progress:
 
 ## Current Position
 
-Phase: 02 (todo-crud) — EXECUTING
-Plan: 1 of 4
+Phase: 03 (calendar-integration) — EXECUTING
+Plan: 2 of 3 (next)
 
-- **Phase:** 2 — Todo CRUD (against today)
-- **Plan:** None yet
-- **Status:** Phase 2 shipped — PR #1
-- **Progress:** ▰▱▱▱ 25% (1 / 4 phases complete)
+- **Phase:** 3 — Calendar Integration
+- **Plan:** 03-01 complete; 03-02 next (app.js wiring)
+- **Status:** Phase 3 plan 1/3 (calendar module) shipped
+- **Progress:** ▰▰▱▱ 50% (2 / 4 phases complete; phase 3 in progress)
 
 ## Performance Metrics
 
@@ -56,6 +56,9 @@ Plan: 1 of 4
 | `js/todos.js` 단일 파일 + 전체 리스트 재렌더 | v1 규모에서 성능 충분, 버그 표면/가독성 우선 | Phase 2 |
 | 완료 = strikethrough + 회색 (미니멀) | TODO-03 충족, 본격 폴리시는 Phase 4 (STYL-01) | Phase 2 |
 | save 실패 시 console.warn만 (UX 노출 없음) | PERS-04 토스트는 Phase 4 잠금 | Phase 2 |
+| `monthGrid`을 `+i` 루프 + Date 생성자 overflow normalization으로 구현 (조건부 leap-year 분기 제거) | 항상 42셀 고정 — 레이아웃 점프 없음, 분기 0개 | Phase 3 (plan 01) |
+| 인접달 셀은 `<div>` (not `<button disabled>`) — `data-key` 부재로 자동 비활성 | 위임 핸들러의 `closest('[data-key]')` 가드만으로 no-op 보장; 브라우저별 disabled focus 차이 회피 | Phase 3 (plan 01) |
+| `formatHeader`은 `key`를 split + `new Date(y, m-1, d)`로 재구성 (절대 `new Date(key)` 금지) | Phase 1의 로컬 시간 lock 유지 (ECMA-262 §21.4.3.2 ISO 문자열 UTC 드리프트 회피) | Phase 3 (plan 01) |
 
 ### Open Todos
 
@@ -68,8 +71,8 @@ None.
 
 ## Session Continuity
 
-- **Last session:** 2026-05-03T10:43:25.211Z
-- **Next action:** `/clear` 후 `/gsd-plan-phase 2`로 Phase 2 계획 수립.
+- **Last session:** 2026-05-03T11:08:00Z
+- **Next action:** Phase 3 plan 02 실행 (`js/app.js` wiring — selectedKey/viewYM, mount restructure, render fan-out).
 
 ---
 *State initialized: 2026-05-03*

@@ -52,7 +52,10 @@
   3. Each date cell with one or more todos shows that count; cells with zero todos show no badge, and the badge updates immediately when todos are added/deleted.
   4. Clicking any date cell selects it, the selected-day human-friendly header (e.g. "2026년 5월 3일 일요일") updates, and the todo list re-renders for that date.
   5. CRUD operations performed on the selected date persist and re-appear on that exact date after reload — no UTC drift between cell, key, and stored data.
-**Plans**: TBD
+**Plans**: 3 plans
+  - [x] 03-01-PLAN.md — js/calendar.js: pure helpers (monthGrid/prev/next/todayYM) + renderCalendar + formatHeader
+  - [ ] 03-02-PLAN.md — js/app.js wiring: selectedKey+viewYM, mount restructure, render fan-out, delegated calendar listener
+  - [ ] 03-03-PLAN.md — css/styles.css minimal calendar grid + state class rules
 **UI hint**: yes
 
 ### Phase 4: Modern Polish & Failure UX
@@ -71,7 +74,7 @@
 |-------|----------------|--------|-----------|
 | 1. Foundation | 0/0 | Not started | - |
 | 2. Todo CRUD | 0/0 | Not started | - |
-| 3. Calendar Integration | 0/0 | Not started | - |
+| 3. Calendar Integration | 1/3 | In progress | - |
 | 4. Modern Polish & Failure UX | 0/0 | Not started | - |
 
 ## Coverage
