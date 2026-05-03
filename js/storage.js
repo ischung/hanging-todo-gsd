@@ -14,6 +14,11 @@ export function load() {
     const parsed = JSON.parse(raw);
     if (!parsed || parsed.schemaVersion !== 1) return defaultState();
     if (!parsed.todosByDate || typeof parsed.todosByDate !== 'object') return defaultState();
+    // 각 날짜 key의 value가 배열이어야 한다 (todos.js 헬퍼들의 invariant).
+    // DevTools 등으로 변조된 경우 전체를 기본 상태로 폴백하여 todos.js가 throw하지 않도록 보장.
+    for (const k of Object.keys(parsed.todosByDate)) {
+      if (!Array.isArray(parsed.todosByDate[k])) return defaultState();
+    }
     return parsed;
   } catch {
     return defaultState();
