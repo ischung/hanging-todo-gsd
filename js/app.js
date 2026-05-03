@@ -86,7 +86,10 @@ listContainer.addEventListener('click', (e) => {
   const id = t.closest('li')?.dataset.id;
   if (!id) return;
   if (t.matches('.todo-remove')) commit(removeTodo(state, TODAY, id));
-  else if (t.matches('.todo-edit') || t.matches('.todo-text')) startEdit(id);
+  else if (t.matches('.todo-edit') || t.matches('.todo-text')) {
+    // 동일 id에 대한 startEdit 재진입은 무시 (입력 중 ✎ 재클릭 시 cursor/selection/입력 텍스트 유실 방지)
+    if (editingId !== id) startEdit(id);
+  }
 });
 
 // 위임: 편집 input keydown — 한국어 IME 가드 (Pitfall 1)
