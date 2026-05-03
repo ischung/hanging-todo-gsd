@@ -8,7 +8,7 @@
 
 - [ ] **Phase 1: Foundation** — Static shell, date helpers, todo model, persistence layer, README run-instructions
 - [ ] **Phase 2: Todo CRUD (against today)** — Store + todo list view with add/toggle/edit/delete persisted across reload
-- [ ] **Phase 3: Calendar Integration** — Month-grid calendar with date selection, today/selected highlights, count badges
+- [x] **Phase 3: Calendar Integration** — Month-grid calendar with date selection, today/selected highlights, count badges
 - [ ] **Phase 4: Modern Polish & Failure UX** — Modern/polished visual style + graceful save-failure surfacing
 
 ## Phase Details
