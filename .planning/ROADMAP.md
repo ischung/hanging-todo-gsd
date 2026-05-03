@@ -39,7 +39,7 @@
   - [x] 02-01-PLAN.md — js/todos.js: pure immutable state helpers + renderTodoList
   - [x] 02-02-PLAN.md — app.js bootstrap: TODAY 캡처 + DOM 마운트 + form submit (add)
   - [x] 02-03-PLAN.md — app.js 위임 이벤트 4종 + 인라인 편집 라이프사이클 (toggle/edit/remove)
-  - [ ] 02-04-PLAN.md — css/styles.css 미니멀 3룰 + phase-gate 검증 (grep + 16 시나리오)
+  - [x] 02-04-PLAN.md — css/styles.css 미니멀 3룰 + phase-gate 검증 (grep + 16 시나리오)
 **UI hint**: yes
 
 ### Phase 3: Calendar Integration
