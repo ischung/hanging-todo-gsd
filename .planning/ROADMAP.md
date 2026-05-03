@@ -65,7 +65,10 @@
 **Success Criteria** (what must be TRUE):
   1. The calendar and todo list show the modern/polished visual style: refined typography, subtle shadows, smooth hover/selection transitions, consistent spacing — recognizable as "polished" on first glance.
   2. When `localStorage.setItem` fails (quota exceeded, Safari Private Mode, storage disabled), the app does not crash; the user sees a visible failure notice (e.g. toast) instead of a silent fake-save.
-**Plans**: TBD
+**Plans**: 3 plans
+  - [ ] 04-01-PLAN.md — css/styles.css: design tokens at :root + 토큰 매핑 + banner 룰 + transition 도입 (STYL-01)
+  - [ ] 04-02-PLAN.md — index.html banner 마크업 + color-scheme meta + js/storage.js save() throw 전환 (PERS-04 인프라)
+  - [ ] 04-03-PLAN.md — js/app.js storageError + commit try/catch + render banner 토글 + banner 위임 + UAT checkpoint (PERS-04 통합)
 **UI hint**: yes
 
 ## Progress
@@ -75,7 +78,7 @@
 | 1. Foundation | 0/0 | Not started | - |
 | 2. Todo CRUD | 0/0 | Not started | - |
 | 3. Calendar Integration | 3/3 | Complete (UAT pending) | 2026-05-03 |
-| 4. Modern Polish & Failure UX | 0/0 | Not started | - |
+| 4. Modern Polish & Failure UX | 0/3 | Not started | - |
 
 ## Coverage
 
