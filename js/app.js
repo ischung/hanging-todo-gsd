@@ -11,14 +11,18 @@ window.STORAGE_KEY = KEY;
 
 console.info('[hansung-todo] foundation loaded', { today: dateKey() });
 
-// Phase 2 (02-02): 부트스트랩 — TODAY 캡처 → DOM 마운트(폼 + 리스트 컨테이너) → 최초 렌더 → 추가 폼 submit 와이어링.
-// toggle/edit/remove 위임 listener는 02-03에서 추가.
+// Phase 2 (02-02): 부트스트랩 — DOM 마운트(폼 + 리스트 컨테이너) → 최초 렌더 → 추가 폼 submit 와이어링.
+// Phase 3 (03-02): selectedKey/viewYM 모듈 상태 도입, 캘린더 + 헤더 마운트 추가, render 팬아웃.
 import {
   getTodosForDate, addTodo, toggleTodo, editTodo, removeTodo, renderTodoList,
 } from './todos.js';
+import {
+  todayYM, prevMonth, nextMonth, renderCalendar, formatHeader,
+} from './calendar.js';
 
-const TODAY = dateKey();
 let state = load();
+let viewYM = todayYM();              // {y, m} — transient UI state, never persisted (decision D)
+let selectedKey = dateKey();         // "YYYY-MM-DD" — resets to today on reload (decision D)
 let editingId = null; // transient UI state — store 외부 (02-03에서 사용)
 
 function buildForm() {
@@ -42,11 +46,25 @@ function buildListContainer() {
   return div;
 }
 
+function buildCalendarSection() {
+  const s = document.createElement('section');
+  s.id = 'calendar';
+  return s;
+}
+
+function buildDateHeader() {
+  const h = document.createElement('header');
+  h.id = 'date-header';
+  return h;
+}
+
 const form = buildForm();
 const listContainer = buildListContainer();
+const calendarSection = buildCalendarSection();
+const dateHeader = buildDateHeader();
 const root = document.getElementById('app');
 if (!root) throw new Error('[hansung-todo] #app 마운트 노드가 없습니다. index.html에 <main id="app">가 있고, app.js가 defer 또는 <body> 끝에서 로드되는지 확인하세요.');
-root.replaceChildren(form, listContainer);
+root.replaceChildren(calendarSection, dateHeader, form, listContainer);
 
 function commit(nextState) {
   state = nextState;
@@ -57,7 +75,7 @@ function commit(nextState) {
 }
 
 function render() {
-  const todos = getTodosForDate(state, TODAY);
+  const todos = getTodosForDate(state, selectedKey);
   renderTodoList(listContainer, todos, editingId);
 }
 
@@ -65,7 +83,7 @@ form.addEventListener('submit', (e) => {
   e.preventDefault();
   const input = form.querySelector('input');
   if (!input.value.trim()) return;
-  commit(addTodo(state, TODAY, input.value));
+  commit(addTodo(state, selectedKey, input.value));
   input.value = '';
   input.focus();
 });
@@ -76,7 +94,7 @@ listContainer.addEventListener('change', (e) => {
   if (!(cb instanceof HTMLInputElement) || cb.type !== 'checkbox') return;
   const id = cb.closest('li')?.dataset.id;
   if (!id) return;
-  commit(toggleTodo(state, TODAY, id));
+  commit(toggleTodo(state, selectedKey, id));
 });
 
 // 위임: 클릭 — 삭제 / 편집 시작
@@ -85,7 +103,7 @@ listContainer.addEventListener('click', (e) => {
   if (!(t instanceof HTMLElement)) return;
   const id = t.closest('li')?.dataset.id;
   if (!id) return;
-  if (t.matches('.todo-remove')) commit(removeTodo(state, TODAY, id));
+  if (t.matches('.todo-remove')) commit(removeTodo(state, selectedKey, id));
   else if (t.matches('.todo-edit') || t.matches('.todo-text')) {
     // 동일 id에 대한 startEdit 재진입은 무시 (입력 중 ✎ 재클릭 시 cursor/selection/입력 텍스트 유실 방지)
     if (editingId !== id) startEdit(id);
@@ -118,7 +136,7 @@ function startEdit(id) {
     const prevInput = listContainer.querySelector('.todo-edit-input');
     const prevId = editingId;
     editingId = null; // focusout 핸들러 재진입 차단 (Pitfall 2 + WR-01)
-    if (prevInput) commit(editTodo(state, TODAY, prevId, prevInput.value));
+    if (prevInput) commit(editTodo(state, selectedKey, prevId, prevInput.value));
   }
   editingId = id;
   render();
@@ -132,7 +150,7 @@ function startEdit(id) {
 function commitEdit(input) {
   const id = editingId; editingId = null;   // ← 가드 먼저 풀기 (Pitfall 2)
   if (id == null) return;
-  commit(editTodo(state, TODAY, id, input.value));
+  commit(editTodo(state, selectedKey, id, input.value));
 }
 
 function cancelEdit() {
