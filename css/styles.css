@@ -74,32 +74,33 @@
 }
 .cal-cell {
   background: none;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border);
   padding: 0.25rem;
   min-height: 3rem;
   position: relative;
   text-align: left;
   font: inherit;
   cursor: pointer;
+  transition: var(--transition);
 }
 .cal-cell-adjacent {
-  border: 1px solid #eee;
+  border: 1px solid var(--border);
   color: #ccc;
   pointer-events: none;
 }
 .cal-cell.is-today {
-  border: 2px solid #2563eb;
-  color: #2563eb;
+  border: 2px solid var(--accent);
+  color: var(--accent);
   font-weight: 600;
 }
 .cal-cell.is-selected {
-  background: #2563eb;
+  background: var(--accent);
   color: #fff;
 }
 .cal-cell.is-today.is-selected {
-  background: #2563eb;
+  background: var(--accent);
   color: #fff;
-  border: 2px solid #1e40af;
+  border: 2px solid var(--accent-strong);
 }
 .cal-badge {
   position: absolute;
@@ -112,4 +113,12 @@
   margin: 1rem 0 0.5rem;
   font-size: 1.125rem;
   font-weight: 600;
+}
+
+/* Phase 4 (STYL-01): transition 적용 — hover/selected/toggle 부드러움. */
+button {
+  transition: var(--transition);
+}
+.todo-checkbox {
+  transition: var(--transition);
 }
