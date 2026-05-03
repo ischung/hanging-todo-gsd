@@ -73,37 +73,37 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CAL-01 | TBD | Pending |
-| CAL-02 | TBD | Pending |
-| CAL-03 | TBD | Pending |
-| CAL-04 | TBD | Pending |
-| CAL-05 | TBD | Pending |
-| CAL-06 | TBD | Pending |
-| CAL-07 | TBD | Pending |
-| TODO-01 | TBD | Pending |
-| TODO-02 | TBD | Pending |
-| TODO-03 | TBD | Pending |
-| TODO-04 | TBD | Pending |
-| TODO-05 | TBD | Pending |
-| TODO-06 | TBD | Pending |
-| TODO-07 | TBD | Pending |
-| TODO-08 | TBD | Pending |
-| PERS-01 | TBD | Pending |
-| PERS-02 | TBD | Pending |
-| PERS-03 | TBD | Pending |
-| PERS-04 | TBD | Pending |
-| PERS-05 | TBD | Pending |
-| DEL-01 | TBD | Pending |
-| DEL-02 | TBD | Pending |
-| DEL-03 | TBD | Pending |
-| STYL-01 | TBD | Pending |
-| STYL-02 | TBD | Pending |
+| CAL-01 | Phase 3 | Pending |
+| CAL-02 | Phase 3 | Pending |
+| CAL-03 | Phase 3 | Pending |
+| CAL-04 | Phase 3 | Pending |
+| CAL-05 | Phase 3 | Pending |
+| CAL-06 | Phase 3 | Pending |
+| CAL-07 | Phase 3 | Pending |
+| TODO-01 | Phase 2 | Pending |
+| TODO-02 | Phase 2 | Pending |
+| TODO-03 | Phase 2 | Pending |
+| TODO-04 | Phase 2 | Pending |
+| TODO-05 | Phase 2 | Pending |
+| TODO-06 | Phase 2 | Pending |
+| TODO-07 | Phase 2 | Pending |
+| TODO-08 | Phase 3 | Pending |
+| PERS-01 | Phase 1 | Pending |
+| PERS-02 | Phase 1 | Pending |
+| PERS-03 | Phase 2 | Pending |
+| PERS-04 | Phase 4 | Pending |
+| PERS-05 | Phase 1 | Pending |
+| DEL-01 | Phase 1 | Pending |
+| DEL-02 | Phase 1 | Pending |
+| DEL-03 | Phase 1 | Pending |
+| STYL-01 | Phase 4 | Pending |
+| STYL-02 | Phase 2 | Pending |
 
 **Coverage:**
 - v1 requirements: 25 total
-- Mapped to phases: 0 (filled by roadmap)
-- Unmapped: 25 ⚠️
+- Mapped to phases: 25 ✓
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-05-03*
-*Last updated: 2026-05-03 after initial definition*
+*Last updated: 2026-05-03 after roadmap creation*
