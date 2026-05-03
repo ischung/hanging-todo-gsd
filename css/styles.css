@@ -122,3 +122,35 @@ button {
 .todo-checkbox {
   transition: var(--transition);
 }
+
+/* Phase 4 (STYL-01): subtle elevation — CONTEXT A.2 잠금 (캘린더/리스트/banner 3곳 한정).
+   shadow는 elevation only — outer box 영역 변화 0 (margin/padding/border-width 미변경) → 시각 회귀 0 보존. */
+.cal-grid {
+  box-shadow: var(--shadow-1);
+}
+.todo-list {
+  box-shadow: var(--shadow-1);
+}
+
+/* Phase 4 (PERS-04): storage failure banner. 색맹 안전 3중 신호(배경 + 좌측 막대 + 텍스트). */
+.banner {
+  display: block;
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-4);
+  border-radius: 4px;
+  box-shadow: var(--shadow-1);
+  transition: opacity var(--transition);
+}
+.banner[hidden] {
+  display: none;
+}
+.banner--danger {
+  background: var(--danger-bg);
+  color: var(--text);
+  border-left: 4px solid var(--danger);
+}
+.banner__actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
