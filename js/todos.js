@@ -7,11 +7,18 @@ export function getTodosForDate(state, key) {
   return [...list].sort((a, b) => a.createdAt - b.createdAt);
 }
 
+// crypto.randomUUID는 secure context에서만 정의된다. Chrome은 file://을 secure로
+// 취급하지만 Safari는 그렇지 않다. STACK이 file:// 더블클릭 데모를 권장하므로 폴백을 둔다.
+function newId() {
+  if (globalThis.crypto?.randomUUID) return globalThis.crypto.randomUUID();
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
 export function addTodo(state, key, text) {
   const trimmed = text.trim();
   if (!trimmed) return state; // no-op (호출처가 이미 가드해도 idempotent)
   const todo = {
-    id: crypto.randomUUID(),
+    id: newId(),
     text: trimmed,
     done: false,
     createdAt: Date.now(),
