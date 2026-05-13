@@ -1,14 +1,14 @@
 ---
 gsd_state_version: 1.0
 milestone: v1.0
-milestone_name: milestone
-status: "Phase 4 shipped — PR #3 (Modern Polish & Failure UX, VERIFICATION 14/14 PASS)"
-last_updated: "2026-05-03T23:10:00Z"
+milestone_name: MVP
+status: "v1.0 shipped — archived 2026-05-13 (tech_debt verdict, 0 blockers)"
+last_updated: "2026-05-13T00:00:00Z"
 progress:
   total_phases: 4
   completed_phases: 4
-  total_plans: 9
-  completed_plans: 9
+  total_plans: 11
+  completed_plans: 11
   percent: 100
 ---
 
@@ -16,67 +16,67 @@ progress:
 
 ## Project Reference
 
-- **Core Value:** 사용자가 캘린더에서 날짜를 골라 그 날의 todo를 손쉽게 관리할 수 있고, 새로고침 후에도 데이터가 유지된다.
-- **Current Focus:** Phase 4 complete — milestone v1.0 verified, UAT 대기
-- **Tech Stack:** Vanilla HTML/CSS/JS (no build, no framework), `localStorage` persistence
+See: `.planning/PROJECT.md` (updated 2026-05-13)
+
+- **Core value:** 사용자가 캘린더에서 날짜를 골라 그 날의 todo를 손쉽게 관리, 새로고침 후에도 데이터 유지
+- **Current focus:** v1.0 shipped — planning next milestone (`/gsd-new-milestone`)
+- **Tech Stack:** Vanilla HTML/CSS/JS (no build, no framework), `localStorage` 단일 어댑터
 
 ## Current Position
 
-Phase: 04 (modern-polish-failure-ux) — COMPLETE ✓
-Plan: 모든 phase 완료 — milestone v1.0 ship 대기
-
-- **Phase:** 4 — Modern Polish + Failure UX ✓ (3/3 plans, VERIFICATION 14/14 PASS)
-- **Plan:** 04-01 ✓ (CSS tokens), 04-02 ✓ (banner + storage throw), 04-03 ✓ (commit try/catch + render toggle)
-- **Status:** 모든 phase 완료, 사용자 시각 검증 approved
-- **Progress:** ▰▰▰▰ 100% (4 / 4 phases complete)
+- **Milestone:** v1.0 MVP — ✅ SHIPPED 2026-05-13
+- **Tag:** `v1.0`
+- **Archives:** `.planning/milestones/v1.0-{ROADMAP,REQUIREMENTS,MILESTONE-AUDIT}.md`
+- **Next step:** `/gsd-new-milestone` to scope v1.1
 
 ## Performance Metrics
 
 | Metric | Value |
 |--------|-------|
-| Phases planned | 4 |
-| Phases complete | 1 |
-| Requirements mapped | 25 / 25 |
-| Plans complete | 1 |
-| Verifications passing | Phase 1 ✓ |
+| Phases shipped | 4 / 4 |
+| Plans shipped | 11 / 11 |
+| Requirements covered | 25 / 25 (audit `tech_debt`, 0 blockers) |
+| LOC (js + css) | 674 |
+| Files changed | 62 |
+| Commits | 80 |
+| PRs merged | #1, #2, #3 |
 
 ## Accumulated Context
 
-### Decisions
+### Decisions (summary)
 
-| Decision | Rationale | Phase |
-|----------|-----------|-------|
-| 4-phase coarse roadmap (vs research's 5) | Merged research P1 (skeleton/date) + P2 (storage) into one "Foundation" phase to honor coarse granularity | Roadmap |
-| Single ROADMAP.md key `hansung-todo:v1` | Atomic write, simple load (per ARCHITECTURE.md) | Phase 1 |
-| Local-time `dateKey()` helper, no `toISOString` | Avoid Pitfall 1 UTC drift | Phase 1 |
-| `textContent`-only for user input | Avoid Pitfall 2 XSS | Phase 2 |
-| Delivery method (`python3 -m http.server` only, no `file://`) | Modern browsers block module from `file://` (Pitfall 4) | Phase 1 |
-| 인라인 편집 (Enter/Esc/blur), 모달 없음 | 마크업·모듈 최소화; 모달은 Phase 4 폴리시에서 필요 시 | Phase 2 |
-| 즉시 삭제 (확인 없음, undo 없음) | 데이터 가벼움 + 재추가 비용 낮음; undo는 v2 (POL) | Phase 2 |
-| `js/todos.js` 단일 파일 + 전체 리스트 재렌더 | v1 규모에서 성능 충분, 버그 표면/가독성 우선 | Phase 2 |
-| 완료 = strikethrough + 회색 (미니멀) | TODO-03 충족, 본격 폴리시는 Phase 4 (STYL-01) | Phase 2 |
-| save 실패 시 console.warn만 (UX 노출 없음) | PERS-04 토스트는 Phase 4 잠금 | Phase 2 |
-| `monthGrid`을 `+i` 루프 + Date 생성자 overflow normalization으로 구현 (조건부 leap-year 분기 제거) | 항상 42셀 고정 — 레이아웃 점프 없음, 분기 0개 | Phase 3 (plan 01) |
-| 인접달 셀은 `<div>` (not `<button disabled>`) — `data-key` 부재로 자동 비활성 | 위임 핸들러의 `closest('[data-key]')` 가드만으로 no-op 보장; 브라우저별 disabled focus 차이 회피 | Phase 3 (plan 01) |
-| `formatHeader`은 `key`를 split + `new Date(y, m-1, d)`로 재구성 (절대 `new Date(key)` 금지) | Phase 1의 로컬 시간 lock 유지 (ECMA-262 §21.4.3.2 ISO 문자열 UTC 드리프트 회피) | Phase 3 (plan 01) |
-| today 강조는 border 굵기(1→2px) + color 이중 신호; selected는 filled bg — 신호 종류 자체가 달라 색맹 안전 | decision C/E; color-only 회피 | Phase 3 (plan 03) |
-| Phase 3 CSS는 box-shadow/transition/animation/gradient 토큰 0개 | STYL-01에서 본격 폴리시; 미니멀 가시성만 보장 | Phase 3 (plan 03) |
-| selectedKey/viewYM은 module-let, save() 경로 미흐름 — reload 시 today reset | decision D — schema 확장 회피, v1 단순화 | Phase 3 (plan 02) |
-| 캘린더 click 핸들러는 commit() 호출 없음 — 순수 UI 상태 | render() 단일 진입점 보존; storage write 없음 | Phase 3 (plan 02) |
+Full decisions log in `PROJECT.md` § Key Decisions. v1.0 마일스톤 13개 결정 모두 ✓ Good 또는 ⚠ Revisit로 표기되었으며 blocker 없음.
 
-### Open Todos
+### Open Items (carry-over to next milestone)
 
-- Phase 3에서 `app.js`의 `window.*` dev 노출 압축/제거 재검토.
-- Phase 3에서 `<main>` 마운트 구조 재배치 (캘린더 도입).
+- VERIFICATION.md 2건 retroactive 작성 (Phase 1, 2)
+- 편집 중 캘린더 셀 클릭 시 `editingId` flush — 편집 텍스트 유실 race
+- dev 전용 `window.*` 글로벌 정리
+- POL-01..06 v2 backlog 우선순위 결정
 
 ### Blockers
 
 None.
 
+## Deferred Items
+
+v1.0 마일스톤 완료 시 (2026-05-13) acknowledged & deferred items:
+
+| Category | Item | Status |
+|----------|------|--------|
+| tech_debt | Phase 1 VERIFICATION.md missing | informational (implicit 검증으로 충족, 산출물 부재) |
+| tech_debt | Phase 1 01-UAT.md status: testing (in-flight) | informational |
+| tech_debt | Phase 2 VERIFICATION.md missing | informational (UAT 14/14 PASS) |
+| tech_debt | Phase 2 editingId cleanup race (캘린더 클릭 시 편집 텍스트 유실) | known race, 데이터 안전성 보장 |
+| tech_debt | dev 전용 `window.*` 글로벌 (STORAGE_KEY 등) Phase 4까지 잔존 | known leakage, 정적 데모 특성상 허용 |
+| tech_debt | Phase 4 글로벌 페이지 레이아웃(body margin reset, max-width) 절제 | 의도된 한정일 가능성 |
+
+상세: `.planning/milestones/v1.0-MILESTONE-AUDIT.md`.
+
 ## Session Continuity
 
-- **Last session:** 2026-05-03T11:30:00Z
-- **Next action:** 사용자 12 UAT 시각 확인 (10건 PENDING) 후 Phase 4 (STYL-01 + PERS-04) 진입. Phase 4는 디자인 토큰 도입 + commit() 의 console.warn 사이트에 toast 추가가 핵심.
+- **Last session:** 2026-05-13 — v1.0 milestone archived
+- **Next action:** `/clear` 후 `/gsd-new-milestone` 로 v1.1 범위 정의
 
 ---
-*State initialized: 2026-05-03*
+*State updated: 2026-05-13 after v1.0 milestone close*

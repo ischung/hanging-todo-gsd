@@ -69,6 +69,19 @@ completed: 2026-05-03
 - **Task 2 — render fan-out + delegated calendar listener (`cf2dda0`):** `render()`가 (1) `renderCalendar(calendarSection, viewYM, selectedKey, state.todosByDate)` → (2) `dateHeader.textContent = formatHeader(selectedKey)` → (3) `renderTodoList(listContainer, todos, editingId)`를 순차 호출. `calendarSection.addEventListener('click', ...)` 1개 등록: closest('[data-action]')로 nav 분기 (prev/next는 viewYM만, today는 viewYM + selectedKey 동시 갱신), closest('[data-key]')로 셀 선택 (selectedKey만 갱신). 두 분기 모두 commit() 호출 없음 — 순수 UI 상태.
 - **Task 3 — index.html 코멘트 갱신 (`48071bc`):** `<main id="app">` 안의 코멘트만 "Phase 3: js/app.js mounts calendar + 날짜 헤더 + todo form/list 순서로 렌더"로 교체. 마크업 구조 변경 없음 (JS가 subtree 소유 — Phase 2 패턴 보존).
 
+## User-Facing Changes
+
+Phase 2까지는 "오늘" 한 날짜에만 todo를 달 수 있었다. 본 plan 이후 사용자는 다음을 할 수 있다:
+
+- **임의 날짜 선택 (CAL-05, CAL-07):** 캘린더 셀을 클릭하면 그 셀이 selected 상태(파란 배경)로 바뀌고, 그 아래 날짜 헤더(`2026년 5월 13일` 형식)와 todo 리스트가 그 날짜 기준으로 즉시 재렌더된다.
+- **임의 날짜에 todo CRUD (TODO-08):** 선택된 날짜에 대해 추가/완료 토글/수정/삭제가 모두 동작한다. 입력 form은 더 이상 "오늘"로 고정되지 않고 현재 selectedKey로 추가한다.
+- **월 이동 (CAL-02):** 헤더의 `‹` / `›` 버튼으로 이전/다음 달로 이동한다. 12월 → 1월, 1월 → 12월 wrap도 자연스럽다. 이동 중 selectedKey는 보존되므로 원래 달로 돌아오면 같은 셀이 다시 selected로 보인다.
+- **"오늘" 점프 (CAL-03):** "오늘" 버튼은 viewYM과 selectedKey를 동시에 today로 스냅한다 — 멀리 떠난 사용자가 한 번에 복귀할 수 있다.
+- **인접달 셀:** 회색으로 흐릿하게 보이고 클릭해도 무동작(혼동 방지).
+- **새로고침 동작:** todo 데이터는 localStorage에 그대로 남지만 selectedKey는 의도적으로 today로 reset된다(decision D). 즉 reload 후 사용자는 항상 오늘 날짜를 먼저 보게 된다.
+
+캘린더 셀의 todo 배지(`CAL-06`)와 today/selected 시각 강조(`CAL-04`) 자체의 렌더 로직은 plan 01에서, 색/테두리 등 스타일은 plan 03에서 land됨 — 본 plan은 그 둘을 실제 상태와 wiring한다.
+
 ## Task Commits
 
 1. **Task 1: selectedKey/viewYM + calendar/header mount** — `4209235` (feat)
