@@ -156,6 +156,15 @@ Todo 모델 (Phase 2에서 구현; Phase 1은 스키마만 잠금):
     <automated>node -e "import('./js/dateKey.js').then(m => { const r = m.dateKey(new Date(2026,4,3,23,55)); if (r !== '2026-05-03') { console.error('FAIL:', r); process.exit(1); } console.log('OK:', r); })"</automated>
     추가 grep: `grep -nE "toISOString|\.toJSON\(|Date\.UTC|new Date\('" js/dateKey.js` → 0건.
   </verify>
+  <acceptance_criteria>
+    - `test -f js/dateKey.js` → 파일 존재 (exit 0)
+    - `grep -cE "^export function dateKey\b" js/dateKey.js` → `1` (named export 정확히 1개)
+    - `grep -cE "^export default" js/dateKey.js` → `0` (default export 금지)
+    - `grep -cE "export (function|const|let|var) " js/dateKey.js` → `1` (다른 export 추가 금지)
+    - `grep -qE "getFullYear\(\)" js/dateKey.js && grep -qE "getMonth\(\)" js/dateKey.js && grep -qE "getDate\(\)" js/dateKey.js && grep -qE "padStart\(2, *'0'\)" js/dateKey.js` → 모두 매칭
+    - `grep -cE "toISOString|\.toJSON\(|Date\.UTC" js/dateKey.js` → `0`
+    - `node --input-type=module -e "import('./js/dateKey.js').then(m=>{if(m.dateKey(new Date(2026,4,3,23,55))!=='2026-05-03')process.exit(1)})"` → exit 0
+  </acceptance_criteria>
   <done>
     `js/dateKey.js` 파일 존재, `dateKey` named export 1개, `new Date(2026,4,3,23,55)` 입력에 `'2026-05-03'` 반환, 금지 API 미사용.
     Commit: `feat(phase-01): add local-time dateKey helper (PERS-05)`
@@ -212,6 +221,19 @@ Todo 모델 (Phase 2에서 구현; Phase 1은 스키마만 잠금):
     <automated>node --input-type=module -e "import('./js/storage.js').then(m => { if (m.KEY !== 'hansung-todo:v1') throw new Error('KEY'); const d = m.defaultState(); if (d.schemaVersion !== 1 || typeof d.todosByDate !== 'object') throw new Error('defaultState shape'); console.log('OK', d); })"</automated>
     추가: `grep -nE "toISOString|\.toJSON\(|Date\.UTC" js/storage.js` → 0건.
   </verify>
+  <acceptance_criteria>
+    - `test -f js/storage.js` → 파일 존재
+    - `grep -cE "^export const KEY = 'hansung-todo:v1';" js/storage.js` → `1` (KEY 문자열 정확)
+    - `grep -cE "^export function defaultState\b" js/storage.js` → `1`
+    - `grep -cE "^export function load\b" js/storage.js` → `1`
+    - `grep -cE "^export function save\b" js/storage.js` → `1`
+    - `grep -cE "schemaVersion: *1" js/storage.js` → `>= 1` (defaultState 내부)
+    - `grep -cE "try *\{" js/storage.js` → `>= 2` (load, save 모두 래핑)
+    - `grep -cE "JSON\.parse" js/storage.js` → `>= 1`; `grep -cE "JSON\.stringify" js/storage.js` → `>= 1`
+    - `grep -cE "toISOString|\.toJSON\(|Date\.UTC" js/storage.js` → `0`
+    - `grep -cE "migrat" js/storage.js` → `0` (마이그레이션 로직 금지)
+    - `node --input-type=module -e "import('./js/storage.js').then(m=>{if(m.KEY!=='hansung-todo:v1')process.exit(1);const d=m.defaultState();if(d.schemaVersion!==1||typeof d.todosByDate!=='object')process.exit(1);if(m.save({schemaVersion:1,todosByDate:{}})!==true)process.exit(1)}).catch(()=>process.exit(1))"` → exit 0 (Node 환경에 localStorage가 없으므로 실패하면 jsdom 또는 브라우저 검증으로 대체; 최소 import 무에러는 통과해야 함)
+  </acceptance_criteria>
   <done>
     `js/storage.js` 파일 존재; `KEY === 'hansung-todo:v1'`; `defaultState()` 형태 일치; `load`/`save` 모두 try/catch로 감싸짐.
     Commit: `feat(phase-01): add localStorage adapter with schema fallback (PERS-01, PERS-02)`
@@ -249,6 +271,19 @@ Todo 모델 (Phase 2에서 구현; Phase 1은 스키마만 잠금):
     <automated>grep -nE "import .* from '\\./(dateKey|storage)\\.js'" js/app.js | wc -l | tr -d ' '</automated>
     기댓값: `2`. 추가 검증: `grep -cE "localStorage\\." js/app.js` → `0` (storage 경계 유지).
   </verify>
+  <acceptance_criteria>
+    - `test -f js/app.js` → 파일 존재
+    - `grep -cE "^import \{ dateKey \} from '\./dateKey\.js';" js/app.js` → `1`
+    - `grep -cE "^import \{ KEY, defaultState, load, save \} from '\./storage\.js';" js/app.js` → `1`
+    - `grep -cE "^window\.dateKey *=" js/app.js` → `1`
+    - `grep -cE "^window\.defaultState *=" js/app.js` → `1`
+    - `grep -cE "^window\.load *=" js/app.js` → `1`
+    - `grep -cE "^window\.save *=" js/app.js` → `1`
+    - `grep -cE "^window\.STORAGE_KEY *=" js/app.js` → `1`
+    - `grep -cE "^window\." js/app.js` → `5` (정확히 5개만 노출)
+    - `grep -cE "localStorage\." js/app.js` → `0` (storage 경계 유지)
+    - `grep -cE "document\.|querySelector|getElementById|addEventListener" js/app.js` → `0` (Phase 1은 DOM 조작 금지)
+  </acceptance_criteria>
   <done>
     `js/app.js` 존재; `dateKey`/`storage` ESM import 둘 다 상대경로+`.js`; `window.dateKey/defaultState/load/save/STORAGE_KEY` 5개 노출; raw `localStorage.` 호출 0건.
     Commit: `feat(phase-01): bootstrap modules and expose helpers for console verification`
@@ -299,6 +334,18 @@ Todo 모델 (Phase 2에서 구현; Phase 1은 스키마만 잠금):
     수동 검증 (실행 시): 다음 step을 실행해 콘솔 에러 0건 확인:
     `python3 -m http.server 8765 >/dev/null 2>&1 &` → `curl -sf http://localhost:8765/ -o /dev/null && curl -sf http://localhost:8765/js/app.js -o /dev/null && curl -sf http://localhost:8765/js/dateKey.js -o /dev/null && curl -sf http://localhost:8765/js/storage.js -o /dev/null && curl -sf http://localhost:8765/css/styles.css -o /dev/null && echo "all 200"` → `kill %1`.
   </verify>
+  <acceptance_criteria>
+    - `test -f index.html && test -f css/styles.css` → 둘 다 존재
+    - `grep -cE '<html lang="ko">' index.html` → `1`
+    - `grep -cE '<script type="module" src="\./js/app\.js"></script>' index.html` → `1`
+    - `grep -cE '<script' index.html` → `1` (다른 `<script>` 태그 금지, inline 포함)
+    - `grep -cE '<link rel="stylesheet" href="\./css/styles\.css"' index.html` → `1`
+    - `grep -cE '<main id="app"' index.html` → `1`
+    - `grep -cE '<style' index.html` → `0` (inline `<style>` 금지)
+    - `grep -cE 'https?://[^"]*\.(js|css)' index.html` → `0` (외부 CDN 링크 금지)
+    - `grep -cE ':root *\{' css/styles.css` → `>= 1`
+    - `wc -l < css/styles.css` → `>= 1` (min_lines: 1)
+  </acceptance_criteria>
   <done>
     `index.html`은 한국어 lang, 모듈 스크립트 1개, 스타일시트 링크 1개를 가진 정적 셸. `css/styles.css`는 Phase 4 책임 명시 주석을 포함한 골격. http.server로 서빙 시 모든 자산 200 응답, 콘솔 에러 0건.
     Commit: `feat(phase-01): static shell with module bootstrap and css skeleton (DEL-01, DEL-02)`
@@ -356,6 +403,17 @@ Todo 모델 (Phase 2에서 구현; Phase 1은 스키마만 잠금):
   <verify>
     <automated>grep -q "python3 -m http.server" README.md && grep -q "GitHub Pages" README.md && grep -qE "file://|더블클릭" README.md && grep -q "dateKey.js" README.md && grep -q "storage.js" README.md && echo OK</automated>
   </verify>
+  <acceptance_criteria>
+    - `test -f README.md` → 파일 존재
+    - `grep -cE "python3 -m http\.server" README.md` → `>= 1`
+    - `grep -cE "GitHub Pages" README.md` → `>= 1`
+    - `grep -cE "file://|더블클릭" README.md` → `>= 1` (file:// 미지원 경고)
+    - `grep -cE "dateKey\.js" README.md` → `>= 1`
+    - `grep -cE "storage\.js" README.md` → `>= 1`
+    - `grep -cE "app\.js" README.md` → `>= 1`
+    - `grep -ciE "\bnpm\b|\bnpx\b|\byarn\b|\bpnpm\b|\bvite\b|\bwebpack\b|\bbundler\b|\bbuild step\b" README.md` → `0` (빌드/패키지 매니저 언급 금지)
+    - `grep -cE "calendar\.js|todos\.js|dom\.js" README.md` → `0` (Phase 2+ 파일 미언급)
+  </acceptance_criteria>
   <done>
     `README.md`가 실행 명령, file:// 미지원 경고, GitHub Pages 안내, 파일 트리, 한 줄 소개를 모두 포함. npm/빌드 명령 미언급.
     Commit: `docs(phase-01): document run methods and file structure (DEL-03)`
